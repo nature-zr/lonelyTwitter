@@ -2,19 +2,23 @@ package ca.ualberta.cs.lonelytwitter;
 
 import java.util.Date;
 
-public abstract class Tweet implements Tweetable{
+public abstract class Tweet implements Tweetable {
     private Date date;
     private String message;
+    //private String hiddenString;
 
-    public Tweet(String message){
-        this.message = message;
-        this.date = new Date();
-    }
-
-    public Tweet(Date date, String message){
-        this.message = message;
+    public Tweet(Date date, String message) throws TweetToLongException {
         this.date = date;
+        this.message = message;
     }
+
+
+    public Tweet(String message) throws TweetToLongException{
+        this.message = message;
+        this.date = new Date(); 
+    }
+
+    public abstract Boolean isImportant();
 
     public Date getDate() {
         return date;
@@ -28,13 +32,16 @@ public abstract class Tweet implements Tweetable{
         return message;
     }
 
-    public void setMessage(String message) throws TweetTooLongException{
-        if (message.length() > 140){
-            throw new TweetTooLongException();
+    public void setMessage(String message) throws TweetToLongException{
+        if(message.length() > 144) {
+            throw new TweetToLongException();
+        }else {
+            this.message = message;
         }
-        this.message = message;
     }
 
-    public abstract Boolean isImportant();
-
+    @Override
+    public String toString(){
+        return date.toString() + " | " + message;
+    }
 }
